@@ -36,21 +36,8 @@ body {
     position: relative;
     color: #ff8da1;
 }
-.link::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: #ff8da1;
-}
 .link:focus,
 .link:hover {
+    background-color: #ff8da1;
     color: white;
-}
-.link:focus::before,
-.link:hover::before {
-    height: 100%;
 }
