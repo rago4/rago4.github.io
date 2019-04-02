@@ -4,7 +4,7 @@
     let index = 0;
 
     setInterval(() => {
-        index = (index >= wavingHandEmojis.length - 1) ? 0 : index + 1;
         $emoji.textContent = wavingHandEmojis[index];
-    }, 2000);
+        index = (index >= wavingHandEmojis.length - 1) ? 0 : index + 1;
+    }, 1500);
 })();
