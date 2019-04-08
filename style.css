@@ -1,34 +1,33 @@
+html {
+    height: 100%;
+}
+
 body {
     margin: 0;
     background-color: skyblue;
     text-transform: lowercase;
     letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+body.no-js .hero__projects {
+    display: none;
 }
 
 .hero {
     background-color: white;
     color: #1c1c1c;
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    transform: translateY(-50%);
     overflow: hidden;
+    width: 100%;
 }
-
 .hero__container {
     padding: 1em;
     box-sizing: border-box;
     margin: 0 auto;
     max-width: 800px;
     width: 100%;
-}
-
-.footer {
-    color: white;
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 .link {
