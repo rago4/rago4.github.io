@@ -34,7 +34,7 @@ window.onload = function () {
             list.appendChild(item);
         });
 
-        span.textContent = 'This is the list of my latest projects:';
+        span.textContent = 'Here is the list of my latest projects:';
 
         $projects.appendChild(span);
         $projects.appendChild(list);
@@ -43,6 +43,8 @@ window.onload = function () {
     function fetchAndDisplayRecentRepos() {
         const ENDPOINT = 'https://api.github.com/users/rago4/repos';
 
+        $projects.textContent = 'Loading latest projects...';
+
         fetch(ENDPOINT)
             .then(response => {
                 if (!response.ok) throw new Error('Response not ok.');
@@ -50,7 +52,6 @@ window.onload = function () {
                 return response.json();
             })
             .then(json => {
-                $projects.textContent = 'Loading latest projects...';
                 const repos = getLatestRepos(json, 3);
                 $projects.textContent = '';
                 displayRepos(repos);

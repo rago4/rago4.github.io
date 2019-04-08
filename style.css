@@ -29,6 +29,9 @@ body.no-js .hero__projects {
     max-width: 800px;
     width: 100%;
 }
+.hero__projects {
+    margin-bottom: 1em;
+}
 
 .link {
     text-decoration: none;
