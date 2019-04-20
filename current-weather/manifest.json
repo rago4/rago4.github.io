@@ -4,7 +4,7 @@
     "theme_color": "#1c1c1c",
     "background_color": "#f2f2f2",
     "display": "standalone",
-    "scope": "/current-weather",
+    "scope": "/",
     "start_url": "/current-weather",
     "icons": [
         {
