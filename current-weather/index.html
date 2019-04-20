@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Current weather</title>
+
+    <link rel="manifest" href="./manifest.json">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link rel="stylesheet" href="./dist/main.css">
+</head>
+<body class="no-js">
+    <div class="wrapper">
+        <h1 class="heading">Current weather</h1>
+        <p id="status" class="status"></p>
+        <ul id="locations" class="locations"></ul>
+    </div>
+
+    <noscript>
+        <div class="no-script">
+            <span class="no-script__emoji" aria-hidden="true" aria-label="Shrugging person - emoji">🤷</span>
+            <p class="no-script__text">Sorry, you can't use this app without JavaScript.</p>
+        </div>
+    </noscript>
+
+    <script src="./dist/bundle.js"></script>
+</body>
+</html>
