@@ -4,7 +4,8 @@ window.onload = function () {
     const $projects = document.getElementById('projects');
 
     function getLatestRepos(data, count) {
-        const repos = data.filter(({ name }) => name !== 'rago4.github.io' && name !== 'android');
+        const exclude = ['rago4.github.io', 'android', 'context-menu-issue'];
+        const repos = data.filter(({ name }) => exclude.indexOf(name) === -1);
 
         repos.sort(({ updated_at: date1 }, { updated_at: date2 }) => {
             return (
