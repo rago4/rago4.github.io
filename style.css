@@ -13,15 +13,13 @@ body {
     justify-content: center;
     height: 100%;
 }
-body.no-js .hero__projects {
-    display: none;
-}
 
 .hero {
     color: #1c1c1c;
     overflow: hidden;
     width: 100%;
     padding: 1em;
+    animation: fadein 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 .hero__container {
     background-color: white;
@@ -50,4 +48,15 @@ body.no-js .hero__projects {
 .link:hover {
     background-color: #ff8da1;
     color: white;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 200px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
 }
