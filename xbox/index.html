@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countdown to Xbox delivery</title>
+
+    <style>
+      body {
+        color: #fff;
+        font-family: system-ui;
+        margin: 0;
+        padding: 2em;
+        box-sizing: border-box;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #1f1f22;
+      }
+
+      .counter {
+        font-weight: bold;
+        font-size: 3em;
+      }
+
+      .description {
+        position: absolute;
+        bottom: 2em;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .xbox-link {
+        color: #9bf00b;
+        text-decoration: none;
+      }
+      .xbox-link:hover {
+        text-decoration: underline;
+      }
+
+      @media screen and (min-width: 576px) {
+        .counter {
+          font-size: 5em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <span id="counter" class="counter"></span>
+    <span class="description"
+      >till
+      <a
+        href="https://www.xbox.com/pl-PL/consoles/xbox-series-x"
+        rel="noopener noreferer"
+        class="xbox-link"
+        >Xbox</a
+      >
+      arrival</span
+    >
+
+    <script>
+      const SECOND = 1000;
+      const MINUTE = SECOND * 60;
+      const HOUR = MINUTE * 60;
+      const DAY = HOUR * 24;
+
+      const $counter = document.querySelector("#counter");
+      const endDate = new Date("12-10-2020 12:00").getTime();
+
+      function getDiff() {
+        const now = new Date().getTime();
+        const diff = Math.max(0, endDate - now);
+
+        const days = Math.floor(diff / DAY);
+        const hours = Math.floor(diff / HOUR) % 24;
+        const minutes = Math.floor(diff / MINUTE) % 60;
+        const seconds = Math.floor(diff / SECOND) % 60;
+
+        return {
+          days,
+          hours,
+          minutes,
+          seconds,
+        };
+      }
+
+      function updateCounter() {
+        const { days, hours, minutes, seconds } = getDiff();
+
+        $counter.textContent = [days, hours, minutes, seconds]
+          .map((time) => time.toString().padStart(2, "0"))
+          .join(":");
+      }
+
+      updateCounter();
+      setInterval(updateCounter, 1000);
+    </script>
+  </body>
+</html>
