@@ -30,7 +30,10 @@ export function Main() {
           <h2 className="mb-1 text-xl font-semibold text-slate-800">Blog 📝</h2>
           <p className="mb-2 leading-relaxed text-slate-600">
             I'm running a blog on a{" "}
-            <a className="text-blue-500 hover:underline" href="https://dev.to">
+            <a
+              className="text-blue-500 hover:underline"
+              href="https://dev.to/rgolawski"
+            >
               dev.to
             </a>{" "}
             platform. Below you can find a list of my recent posts.

@@ -15,7 +15,7 @@ type Props = {
 export function Book({ data }: Props) {
   return (
     <a
-      className="flex justify-between rounded p-2 shadow ring-1 ring-slate-700/10 hover:bg-slate-50"
+      className="flex justify-between rounded-md p-2 shadow ring-1 ring-slate-700/10 hover:bg-slate-50"
       href={data.goodreads}
     >
       <div>
