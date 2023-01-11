@@ -25,7 +25,18 @@ export function Book({ data }: Props) {
           data.finished
         )}`}</p>
       </div>
-      <ul className="flex space-x-0.5 text-sm">
+      <ul
+        className="flex space-x-0.5 text-sm"
+        title={
+          [
+            "Didn't like it",
+            "It was ok",
+            "Liked it",
+            "Really liked it",
+            "It was amazing!",
+          ][data.rating - 1]
+        }
+      >
         {Array.from({ length: 5 }, (_, index) => (
           <li
             key={index}
