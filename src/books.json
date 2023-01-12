@@ -1,5 +1,14 @@
 [
   {
+    "goodreads": "https://www.goodreads.com/book/show/57628430-the-refuge",
+    "title": "The Refuge",
+    "author": "Jerome Loubry",
+    "year": 2019,
+    "rating": 5,
+    "finished": "01/11/2023",
+    "sentence": ""
+  },
+  {
     "goodreads": "https://www.goodreads.com/book/show/27833670-dark-matter",
     "title": "Dark Matter",
     "author": "Blake Crouch",
@@ -9,8 +18,8 @@
     "sentence": ""
   },
   {
-    "goodreads": "https://www.goodreads.com/book/show/31817750-kr-l",
-    "title": "Król",
+    "goodreads": "https://www.goodreads.com/book/show/48735658-the-king-of-warsaw",
+    "title": "The King of Warsaw",
     "author": "Szczepan Twardoch",
     "year": 2016,
     "rating": 4,
