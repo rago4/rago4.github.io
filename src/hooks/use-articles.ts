@@ -15,7 +15,7 @@ export function useArticles() {
     let ignore = false;
 
     if (!ignore) {
-      fetch("https://dev.to/api/articles?username=rgolawski&per_page=5")
+      fetch("https://dev.to/api/articles?username=rgolawski")
         .then((response) => response.json())
         .then((json) => setData(json))
         .catch(console.error);

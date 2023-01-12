@@ -1,10 +1,14 @@
 import { useArticles } from "../hooks/use-articles";
+import { usePaginate } from "../hooks/use-paginate";
 import { Article } from "./article";
-import books from "../books.json";
 import { Book } from "./book";
+import { Pagination } from "./pagination";
+import books from "../books.json";
 
 export function Main() {
   const articles = useArticles();
+  const paginatedArticles = usePaginate({ data: articles, itemsPerPage: 5 });
+  const paginatedBooks = usePaginate({ data: books, itemsPerPage: 8 });
 
   return (
     <main>
@@ -38,13 +42,18 @@ export function Main() {
             </a>{" "}
             platform. Below you can find a list of my recent posts.
           </p>
-          <ul className="space-y-2">
-            {articles.map((article) => (
+          <ul className="mb-2 space-y-2">
+            {paginatedArticles.paginatedData.map((article) => (
               <li key={article.id}>
                 <Article data={article} />
               </li>
             ))}
           </ul>
+          <Pagination
+            currentPage={paginatedArticles.currentPage}
+            totalPages={paginatedArticles.totalPages}
+            onChange={paginatedArticles.onPageChange}
+          />
         </section>
       ) : null}
       <section className="mb-4">
@@ -63,13 +72,18 @@ export function Main() {
           </a>
           .
         </p>
-        <ul className="grid gap-2 sm:grid-cols-2">
-          {books.map((book) => (
+        <ul className="mb-2 grid gap-2 sm:grid-cols-2">
+          {paginatedBooks.paginatedData.map((book) => (
             <li key={book.title}>
               <Book data={book} />
             </li>
           ))}
         </ul>
+        <Pagination
+          currentPage={paginatedBooks.currentPage}
+          totalPages={paginatedBooks.totalPages}
+          onChange={paginatedBooks.onPageChange}
+        />
       </section>
     </main>
   );
