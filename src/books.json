@@ -1,5 +1,14 @@
 [
   {
+    "goodreads": "https://www.goodreads.com/book/show/63110293-polski-sor",
+    "title": "Polski SOR",
+    "author": "Jan Świtała",
+    "year": 2022,
+    "rating": 4,
+    "finished": "02/15/2023",
+    "sentence": ""
+  },
+  {
     "goodreads": "https://www.goodreads.com/book/show/43798285-the-institute",
     "title": "The Institute",
     "author": "Stephen King",
@@ -11,7 +20,7 @@
   {
     "goodreads": "https://www.goodreads.com/book/show/17345209-the-bat",
     "title": "The Bat",
-    "author": "Jo Nesbo",
+    "author": "Jo Nesbø",
     "year": 1997,
     "rating": 3,
     "finished": "02/02/2023",
@@ -29,7 +38,7 @@
   {
     "goodreads": "https://www.goodreads.com/book/show/57628430-the-refuge",
     "title": "The Refuge",
-    "author": "Jerome Loubry",
+    "author": "Jérôme Loubry",
     "year": 2019,
     "rating": 5,
     "finished": "01/11/2023",
