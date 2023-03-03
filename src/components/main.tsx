@@ -8,7 +8,7 @@ import books from "../books.json";
 export function Main() {
   const articles = useArticles();
   const paginatedArticles = usePaginate({ data: articles, itemsPerPage: 5 });
-  const paginatedBooks = usePaginate({ data: books, itemsPerPage: 8 });
+  const paginatedBooks = usePaginate({ data: books, itemsPerPage: 5 });
 
   return (
     <main>
@@ -72,7 +72,7 @@ export function Main() {
           </a>
           .
         </p>
-        <ul className="mb-2 grid gap-2 sm:grid-cols-2">
+        <ul className="mb-2 space-y-2">
           {paginatedBooks.paginatedData.map((book) => (
             <li key={book.title}>
               <Book data={book} />
