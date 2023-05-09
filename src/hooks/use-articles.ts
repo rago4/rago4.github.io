@@ -6,6 +6,7 @@ export type Article = {
   url: string;
   published_at: string;
   reading_time_minutes: number;
+  tags: string[];
 };
 
 export function useArticles() {
@@ -17,7 +18,12 @@ export function useArticles() {
     if (!ignore) {
       fetch("https://dev.to/api/articles?username=rgolawski")
         .then((response) => response.json())
-        .then((json) => setData(json))
+        .then((json: Article[]) => {
+          const published = json.filter(
+            ({ tags }) => !tags.includes("archived")
+          );
+          setData(published);
+        })
         .catch(console.error);
     }
 
