@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useTemplateRef } from 'vue';
-import { Lamp, Maximize, Minimize } from '@lucide/vue';
-import { presets } from '../composables/useLight';
-import type { PresetId } from '../composables/useLight';
-import { lightColor, warmthToKelvin } from '../utils/lightColor';
-import LightSlider from './LightSlider.vue';
+import { useTemplateRef } from "vue";
+import { Lamp, Maximize, Minimize } from "@lucide/vue";
+import { presets } from "../composables/useLight";
+import type { PresetId } from "../composables/useLight";
+import { lightColor, warmthToKelvin } from "../utils/lightColor";
+import LightSlider from "./LightSlider.vue";
 
-const brightness = defineModel<number>('brightness', { required: true });
-const warmth = defineModel<number>('warmth', { required: true });
+const brightness = defineModel<number>("brightness", { required: true });
+const warmth = defineModel<number>("warmth", { required: true });
 defineProps<{
   warmthName: string;
   activePreset?: PresetId;
@@ -19,9 +19,11 @@ defineEmits<{
   hide: [];
 }>();
 
-const hideButton = useTemplateRef<HTMLButtonElement>('hideButton');
+const hideButton = useTemplateRef<HTMLButtonElement>("hideButton");
 defineExpose({
-  focusHideControls() { hideButton.value?.focus({ preventScroll: true }); },
+  focusHideControls() {
+    hideButton.value?.focus({ preventScroll: true });
+  },
 });
 </script>
 
@@ -31,30 +33,58 @@ defineExpose({
       <span class="lamp-badge" aria-hidden="true">
         <Lamp :size="24" :stroke-width="1.6" />
       </span>
-      <button id="fullscreen" type="button" class="fullscreen-button"
+      <button
+        id="fullscreen"
+        type="button"
+        class="fullscreen-button"
         :aria-label="isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'"
         :title="isFullscreen ? 'Exit fullscreen (F)' : 'Enter fullscreen (F)'"
-        @click="$emit('fullscreen')">
-        <component :is="isFullscreen ? Minimize : Maximize" :size="16" :stroke-width="1.5" aria-hidden="true" />
+        @click="$emit('fullscreen')"
+      >
+        <component
+          :is="isFullscreen ? Minimize : Maximize"
+          :size="16"
+          :stroke-width="1.5"
+          aria-hidden="true"
+        />
       </button>
     </header>
     <h1 id="title">A light for reading.</h1>
     <p class="intro">Make yourself comfortable.</p>
     <div class="presets" role="group" aria-label="Light presets">
-      <button v-for="preset in presets" :key="preset.id" type="button" class="preset"
-        :aria-pressed="activePreset === preset.id" @click="$emit('preset', preset.id)">
-        <span class="swatch" :style="{ backgroundColor: lightColor(warmthToKelvin(preset.warmth), preset.brightness) }" aria-hidden="true"></span>
+      <button
+        v-for="preset in presets"
+        :key="preset.id"
+        type="button"
+        class="preset"
+        :aria-pressed="activePreset === preset.id"
+        @click="$emit('preset', preset.id)"
+      >
+        <span
+          class="swatch"
+          :style="{ backgroundColor: lightColor(warmthToKelvin(preset.warmth), preset.brightness) }"
+          aria-hidden="true"
+        ></span>
         {{ preset.label }}
       </button>
     </div>
     <LightSlider
-      id="brightness" v-model="brightness" label="Brightness" :min="5"
-      :readout="`${brightness}%`" :value-text="`${brightness} percent`"
-      low-label="Soft glow" high-label="Shine bright"
+      id="brightness"
+      v-model="brightness"
+      label="Brightness"
+      :min="5"
+      :readout="`${brightness}%`"
+      :value-text="`${brightness} percent`"
+      low-label="Soft glow"
+      high-label="Shine bright"
     />
     <LightSlider
-      id="warmth" v-model="warmth" label="Warmth" :readout="warmthName"
-      low-label="Morning light" high-label="Golden hour"
+      id="warmth"
+      v-model="warmth"
+      label="Warmth"
+      :readout="warmthName"
+      low-label="Morning light"
+      high-label="Golden hour"
     />
     <button id="read" ref="hideButton" type="button" class="hide-button" @click="$emit('hide')">
       Hide controls
@@ -69,7 +99,9 @@ defineExpose({
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 24px;
   background: rgba(255, 248, 235, 0.95);
-  box-shadow: 0 16px 60px rgba(85, 53, 20, 0.08), 0 2px 6px rgba(85, 53, 20, 0.03);
+  box-shadow:
+    0 16px 60px rgba(85, 53, 20, 0.08),
+    0 2px 6px rgba(85, 53, 20, 0.03);
 }
 
 .panel-header {
@@ -102,7 +134,9 @@ defineExpose({
   transition: background-color 150ms ease;
 }
 
-.fullscreen-button:hover { background: #eddfcd; }
+.fullscreen-button:hover {
+  background: #eddfcd;
+}
 
 h1 {
   margin: 0 0 12px;
@@ -142,10 +176,14 @@ h1 {
   background: transparent;
   color: var(--muted);
   font-size: 11px;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
-.preset:hover { color: var(--ink); }
+.preset:hover {
+  color: var(--ink);
+}
 
 .preset[aria-pressed="true"] {
   border-color: #fff;
@@ -177,16 +215,31 @@ h1 {
   transition: background-color 150ms ease;
 }
 
-.hide-button:hover { background: #6e4930; }
+.hide-button:hover {
+  background: #6e4930;
+}
 
 @media (max-width: 500px) {
-  .panel { width: 100%; max-width: 350px; padding: 25px; }
+  .panel {
+    width: 100%;
+    max-width: 350px;
+    padding: 25px;
+  }
 }
 
 @media (max-height: 630px) and (min-width: 501px) {
-  .panel { padding: 20px 24px; }
-  .panel-header { margin-bottom: 12px; }
-  h1 { font-size: 30px; }
-  .intro, .presets { margin-bottom: 18px; }
+  .panel {
+    padding: 20px 24px;
+  }
+  .panel-header {
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 30px;
+  }
+  .intro,
+  .presets {
+    margin-bottom: 18px;
+  }
 }
 </style>

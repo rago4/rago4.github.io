@@ -1,15 +1,18 @@
 <script setup lang="ts">
 const model = defineModel<number>({ required: true });
-withDefaults(defineProps<{
-  id: string;
-  label: string;
-  readout: string;
-  valueText?: string;
-  min?: number;
-  max?: number;
-  lowLabel: string;
-  highLabel: string;
-}>(), { min: 0, max: 100 });
+withDefaults(
+  defineProps<{
+    id: string;
+    label: string;
+    readout: string;
+    valueText?: string;
+    min?: number;
+    max?: number;
+    lowLabel: string;
+    highLabel: string;
+  }>(),
+  { min: 0, max: 100 },
+);
 </script>
 
 <template>
@@ -19,19 +22,30 @@ withDefaults(defineProps<{
       <output :for="id" :id="`${id}-value`">{{ readout }}</output>
     </div>
     <input
-      :id="id" v-model.number="model" type="range" class="slider" :min="min" :max="max"
-      :aria-valuetext="valueText || readout" :aria-describedby="`${id}-hint`"
-      :style="{ '--progress': `${(model - min) / (max - min) * 100}%` }"
-    >
+      :id="id"
+      v-model.number="model"
+      type="range"
+      class="slider"
+      :min="min"
+      :max="max"
+      :aria-valuetext="valueText || readout"
+      :aria-describedby="`${id}-hint`"
+      :style="{ '--progress': `${((model - min) / (max - min)) * 100}%` }"
+    />
     <div :id="`${id}-hint`" class="range-hints">
-      <span>{{ lowLabel }}</span><span>{{ highLabel }}</span>
+      <span>{{ lowLabel }}</span
+      ><span>{{ highLabel }}</span>
     </div>
   </div>
 </template>
 
 <style scoped>
-.setting { margin-bottom: 26px; }
-.setting--warm { margin-bottom: 29px; }
+.setting {
+  margin-bottom: 26px;
+}
+.setting--warm {
+  margin-bottom: 29px;
+}
 
 .setting-label {
   display: flex;
@@ -96,6 +110,8 @@ output {
 }
 
 @media (max-height: 630px) and (min-width: 501px) {
-  .setting { margin-bottom: 18px; }
+  .setting {
+    margin-bottom: 18px;
+  }
 }
 </style>

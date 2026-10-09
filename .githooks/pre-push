@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+npx --yes oxlint@latest --vue-plugin
+npx --yes oxfmt@latest --check
+npm run typecheck

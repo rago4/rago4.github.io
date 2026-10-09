@@ -1,30 +1,42 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
-import { SlidersHorizontal } from '@lucide/vue';
-import LightPanel from './components/LightPanel.vue';
-import { useLight } from './composables/useLight';
-import type { PresetId } from './composables/useLight';
-import { useScreen } from './composables/useScreen';
-import { useCandleFlicker } from './composables/useCandleFlicker';
+import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from "vue";
+import { SlidersHorizontal } from "@lucide/vue";
+import LightPanel from "./components/LightPanel.vue";
+import { useLight } from "./composables/useLight";
+import type { PresetId } from "./composables/useLight";
+import { useScreen } from "./composables/useScreen";
+import { useCandleFlicker } from "./composables/useCandleFlicker";
 
-const { brightness, warmth, warmthName, activePreset, selectedPreset, kelvin, color, applyPreset } = useLight();
-const candleEnabled = computed(() => selectedPreset.value === 'candle');
+const { brightness, warmth, warmthName, activePreset, selectedPreset, kelvin, color, applyPreset } =
+  useLight();
+const candleEnabled = computed(() => selectedPreset.value === "candle");
 const { frameColor, running } = useCandleFlicker(candleEnabled, kelvin, brightness);
 const displayedColor = computed(() => frameColor.value ?? color.value);
 const { isFullscreen, status, toggleFullscreen, keepAwake } = useScreen();
 const controlsVisible = ref(true);
-const restore = useTemplateRef<HTMLButtonElement>('restore');
-const panel = useTemplateRef<InstanceType<typeof LightPanel>>('panel');
+const restore = useTemplateRef<HTMLButtonElement>("restore");
+const panel = useTemplateRef<InstanceType<typeof LightPanel>>("panel");
 const lightTransitionDuration = ref<150 | 400>(150);
 
-watch([displayedColor, lightTransitionDuration, running], ([value, duration, flickering]) => {
-  document.documentElement.style.setProperty('--light-duration', flickering ? '0ms' : `${duration}ms`);
-  document.documentElement.style.setProperty('--light', value);
-}, { immediate: true });
+watch(
+  [displayedColor, lightTransitionDuration, running],
+  ([value, duration, flickering]) => {
+    document.documentElement.style.setProperty(
+      "--light-duration",
+      flickering ? "0ms" : `${duration}ms`,
+    );
+    document.documentElement.style.setProperty("--light", value);
+  },
+  { immediate: true },
+);
 
-watch(color, value => {
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', value);
-}, { immediate: true });
+watch(
+  color,
+  (value) => {
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", value);
+  },
+  { immediate: true },
+);
 
 function selectPreset(id: PresetId) {
   lightTransitionDuration.value = 400;
@@ -51,31 +63,63 @@ async function setControlsVisible(visible: boolean) {
 
 function handleKeydown(event: KeyboardEvent) {
   if (event.altKey || event.ctrlKey || event.metaKey) return;
-  if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+  if (
+    event.target instanceof Element &&
+    event.target.closest('input, textarea, select, [contenteditable="true"]')
+  )
+    return;
   switch (event.key.toLowerCase()) {
-    case 'h': event.preventDefault(); setControlsVisible(!controlsVisible.value); break;
-    case 'f': event.preventDefault(); toggleFullscreen(); break;
-    case 'escape': if (!controlsVisible.value) setControlsVisible(true); break;
-    case 'arrowup': event.preventDefault(); setBrightness(brightness.value + 5); break;
-    case 'arrowdown': event.preventDefault(); setBrightness(brightness.value - 5); break;
+    case "h":
+      event.preventDefault();
+      setControlsVisible(!controlsVisible.value);
+      break;
+    case "f":
+      event.preventDefault();
+      toggleFullscreen();
+      break;
+    case "escape":
+      if (!controlsVisible.value) setControlsVisible(true);
+      break;
+    case "arrowup":
+      event.preventDefault();
+      setBrightness(brightness.value + 5);
+      break;
+    case "arrowdown":
+      event.preventDefault();
+      setBrightness(brightness.value - 5);
+      break;
   }
 }
 
-onMounted(() => document.addEventListener('keydown', handleKeydown));
-onUnmounted(() => document.removeEventListener('keydown', handleKeydown));
+onMounted(() => document.addEventListener("keydown", handleKeydown));
+onUnmounted(() => document.removeEventListener("keydown", handleKeydown));
 </script>
 
 <template>
   <main class="lamp" aria-label="Reading light">
     <LightPanel
-      v-show="controlsVisible" ref="panel" :brightness="brightness" :warmth="warmth"
-      :warmth-name="warmthName" :active-preset="activePreset" :is-fullscreen="isFullscreen"
-      @update:brightness="setBrightness" @update:warmth="setWarmth"
-      @preset="selectPreset" @fullscreen="toggleFullscreen" @hide="setControlsVisible(false)"
+      v-show="controlsVisible"
+      ref="panel"
+      :brightness="brightness"
+      :warmth="warmth"
+      :warmth-name="warmthName"
+      :active-preset="activePreset"
+      :is-fullscreen="isFullscreen"
+      @update:brightness="setBrightness"
+      @update:warmth="setWarmth"
+      @preset="selectPreset"
+      @fullscreen="toggleFullscreen"
+      @hide="setControlsVisible(false)"
     />
     <button
-      v-if="!controlsVisible" id="restore" ref="restore" type="button" class="restore"
-      aria-label="Show light controls" title="Show controls (H)" @click="setControlsVisible(true)"
+      v-if="!controlsVisible"
+      id="restore"
+      ref="restore"
+      type="button"
+      class="restore"
+      aria-label="Show light controls"
+      title="Show controls (H)"
+      @click="setControlsVisible(true)"
     >
       <SlidersHorizontal :size="16" :stroke-width="1.5" aria-hidden="true" />
       <span>Adjust light</span>
@@ -114,7 +158,10 @@ onUnmounted(() => document.removeEventListener('keydown', handleKeydown));
   transition: opacity 150ms ease;
 }
 
-.restore:hover, .restore:focus-visible { opacity: 1; }
+.restore:hover,
+.restore:focus-visible {
+  opacity: 1;
+}
 
 .reading-hint {
   position: fixed;
@@ -145,21 +192,41 @@ onUnmounted(() => document.removeEventListener('keydown', handleKeydown));
 }
 
 @keyframes hint-away {
-  0%, 60% { opacity: 0.7; }
-  100% { opacity: 0; }
+  0%,
+  60% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @media (max-width: 500px) {
-  .lamp { align-items: center; justify-content: center; padding: 20px; }
-  .restore { right: 20px; bottom: 20px; }
-  .reading-hint { right: 20px; max-width: calc(100% - 40px); }
+  .lamp {
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .restore {
+    right: 20px;
+    bottom: 20px;
+  }
+  .reading-hint {
+    right: 20px;
+    max-width: calc(100% - 40px);
+  }
 }
 
 @media (max-height: 630px) and (min-width: 501px) {
-  .lamp { align-items: center; padding: 16px; }
+  .lamp {
+    align-items: center;
+    padding: 16px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reading-hint { animation: none; }
+  .reading-hint {
+    animation: none;
+  }
 }
 </style>
