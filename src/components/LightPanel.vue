@@ -3,6 +3,7 @@ import { useTemplateRef } from 'vue';
 import { Lamp, Maximize, Minimize } from '@lucide/vue';
 import { presets } from '../composables/useLight';
 import type { PresetId } from '../composables/useLight';
+import { lightColor, warmthToKelvin } from '../utils/lightColor';
 import LightSlider from './LightSlider.vue';
 
 const brightness = defineModel<number>('brightness', { required: true });
@@ -42,7 +43,7 @@ defineExpose({
     <div class="presets" role="group" aria-label="Light presets">
       <button v-for="preset in presets" :key="preset.id" type="button" class="preset"
         :aria-pressed="activePreset === preset.id" @click="$emit('preset', preset.id)">
-        <span class="swatch" :style="{ backgroundColor: preset.color }" aria-hidden="true"></span>
+        <span class="swatch" :style="{ backgroundColor: lightColor(warmthToKelvin(preset.warmth), preset.brightness) }" aria-hidden="true"></span>
         {{ preset.label }}
       </button>
     </div>

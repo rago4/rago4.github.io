@@ -1,21 +1,28 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from 'vue';
 import { SlidersHorizontal } from '@lucide/vue';
 import LightPanel from './components/LightPanel.vue';
 import { useLight } from './composables/useLight';
 import type { PresetId } from './composables/useLight';
 import { useScreen } from './composables/useScreen';
+import { useCandleFlicker } from './composables/useCandleFlicker';
 
-const { brightness, warmth, warmthName, activePreset, color, applyPreset } = useLight();
+const { brightness, warmth, warmthName, activePreset, selectedPreset, kelvin, color, applyPreset } = useLight();
+const candleEnabled = computed(() => selectedPreset.value === 'candle');
+const { frameColor, running } = useCandleFlicker(candleEnabled, kelvin, brightness);
+const displayedColor = computed(() => frameColor.value ?? color.value);
 const { isFullscreen, status, toggleFullscreen, keepAwake } = useScreen();
 const controlsVisible = ref(true);
 const restore = useTemplateRef<HTMLButtonElement>('restore');
 const panel = useTemplateRef<InstanceType<typeof LightPanel>>('panel');
 const lightTransitionDuration = ref<150 | 400>(150);
 
-watch([color, lightTransitionDuration], ([value, duration]) => {
-  document.documentElement.style.setProperty('--light-duration', `${duration}ms`);
+watch([displayedColor, lightTransitionDuration, running], ([value, duration, flickering]) => {
+  document.documentElement.style.setProperty('--light-duration', flickering ? '0ms' : `${duration}ms`);
   document.documentElement.style.setProperty('--light', value);
+}, { immediate: true });
+
+watch(color, value => {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', value);
 }, { immediate: true });
 
