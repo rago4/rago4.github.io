@@ -1,0 +1,31 @@
+:root {
+  color-scheme: light;
+  --light: #e6ba83;
+  --ink: #513b2d;
+  --muted: #917b68;
+  --accent: #875b3b;
+  --surface: #fff8eb;
+  font-family: "DM Sans", sans-serif;
+  font-synthesis: none;
+  color: var(--ink);
+  background: var(--light);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--light);
+  transition: background-color var(--light-duration, 150ms) ease-out;
+}
+
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+svg { flex-shrink: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
