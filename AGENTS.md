@@ -55,6 +55,17 @@ is to list and host apps that I use for my own purposes.
 - Take care of the codebase. Prioritize code quality, readability, and
   maintainability, and follow established patterns.
 
+# Styling
+
+- Style the application with Tailwind CSS utilities.
+- Use Tailwind's default palette, spacing, sizing, typography, shadows, breakpoints,
+  and other design tokens. Do not invent custom colors, shadows, or dimensions.
+- Do not use arbitrary values or properties, such as `w-[12px]`, or custom CSS to
+  bypass these defaults.
+- Name font utilities after the font, such as `font-geist-mono`, so projects can
+  reuse them. Apply fonts within each project without overriding Tailwind's
+  default font families.
+
 # Tests
 
 - Do not add or run unit, integration, or end-to-end tests.

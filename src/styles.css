@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist-mono/wght.css";
+
+@theme {
+  --font-geist-mono: "Geist Mono Variable", monospace;
+}
