@@ -3,6 +3,19 @@
 This is a personal website built with Preact and hosted on GitHub Pages. Its goal
 is to list and host apps that I use for my own purposes.
 
+# Documentation
+
+- Do not create README.md files unless explicitly requested by the user.
+
+# Development and deployment
+
+- Use the Node.js version in `.nvmrc` and install dependencies with `npm ci`.
+- Run `npm run hooks:install` once per clone to enable the native Git pre-push
+  hook. It runs `npm run fmt:check && npm run lint` on the current working tree
+  and blocks the push if either check fails.
+- GitHub Actions checks formatting, lint, and builds; deployment runs only from
+  `main`.
+
 # Git
 
 - Name branches using a Commitizen-style type and a descriptive slug:
