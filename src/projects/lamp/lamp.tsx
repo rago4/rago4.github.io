@@ -45,7 +45,7 @@ export function Lamp() {
   const controlsToggle = useRef<HTMLButtonElement>(null);
   const surface = useRef<HTMLDivElement>(null);
   const controlClass =
-    "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-3 text-xs font-medium hover:bg-zinc-950/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zinc-900";
+    "inline-flex min-h-11 items-center gap-2 rounded-xl px-3 text-xs font-medium text-zinc-600 hover:bg-white/40 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900";
 
   const keyClass =
     "inline-flex size-5 items-center justify-center rounded border border-zinc-900/10 bg-white/40 text-xs text-zinc-500";
@@ -108,8 +108,8 @@ export function Lamp() {
       class={`flex min-h-dvh flex-col font-geist-mono text-zinc-900 scheme-light ${mode.background}`}
     >
       <nav aria-label="Site navigation" class="px-5 py-4 sm:px-8">
-        <a href="#/" class={`${controlClass} text-zinc-600 hover:text-zinc-900`}>
-          <ArrowLeft size={16} aria-hidden="true" /> Back to homepage
+        <a href="#/" class={controlClass}>
+          <ArrowLeft size={16} strokeWidth={1.5} aria-hidden="true" /> Back to homepage
         </a>
       </nav>
       <main>
@@ -158,13 +158,13 @@ export function Lamp() {
                   type="button"
                   onClick={toggleFullscreen}
                   aria-keyshortcuts="f"
-                  class="flex min-h-11 w-full items-center justify-between rounded-xl px-3 text-zinc-600 hover:bg-white/40 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900"
+                  class={`${controlClass} w-full justify-between`}
                 >
                   <span class="flex items-center gap-2">
                     {fullscreen ? (
-                      <Minimize size={15} strokeWidth={1.5} aria-hidden="true" />
+                      <Minimize size={16} strokeWidth={1.5} aria-hidden="true" />
                     ) : (
-                      <Maximize size={15} strokeWidth={1.5} aria-hidden="true" />
+                      <Maximize size={16} strokeWidth={1.5} aria-hidden="true" />
                     )}
                     {fullscreen ? "Exit fullscreen" : "Fullscreen"}
                   </span>
@@ -189,13 +189,13 @@ export function Lamp() {
             aria-controls="lamp-controls"
             aria-expanded={controlsVisible}
             aria-keyshortcuts="h"
-            class={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-xs text-zinc-600 hover:bg-white/50 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 ${controlsVisible ? "absolute top-2 right-2" : "border border-white/40 bg-white/30 shadow-sm"}`}
+            class={`${controlClass} justify-center ${controlsVisible ? "absolute top-2 right-2" : "border border-white/40 bg-white/30 shadow-sm"}`}
           >
             {controlsVisible ? (
-              <EyeOff size={15} strokeWidth={1.5} aria-hidden="true" />
+              <EyeOff size={16} strokeWidth={1.5} aria-hidden="true" />
             ) : (
               <>
-                <SlidersHorizontal size={15} strokeWidth={1.5} aria-hidden="true" /> Controls
+                <SlidersHorizontal size={16} strokeWidth={1.5} aria-hidden="true" /> Controls
               </>
             )}
             <kbd aria-hidden="true" class={keyClass}>
