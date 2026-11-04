@@ -51,6 +51,10 @@ the entry point to this content.
 - Apply DRY pragmatically. Duplication is sometimes cheaper than an abstraction;
   do not abstract merely to eliminate every repetition.
 - Follow YAGNI: implement what is needed now, without speculative features.
+- Avoid implicit state machines. Represent mutually exclusive lifecycle states
+  explicitly with a status or discriminated union, keep state-specific data with
+  its state, and define valid transitions. Do not encode a lifecycle through
+  combinations of booleans, nullable values, or sentinel values.
 - Keep a single source of truth. Before adding a feature, check whether it or the
   required logic already exists within the relevant project and reuse it where
   appropriate. This does not require deduplicating independent projects.

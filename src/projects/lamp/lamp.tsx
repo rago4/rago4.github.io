@@ -38,7 +38,7 @@ const modes = [
 export function Lamp() {
   const [mode, setMode] = useState<(typeof modes)[number]>(modes[1]);
   const [fullscreen, setFullscreen] = useState(false);
-  const [fullscreenError, setFullscreenError] = useState("");
+  const [fullscreenRequest, setFullscreenRequest] = useState<"idle" | "pending" | "failed">("idle");
   const [controlsVisible, setControlsVisible] = useState(true);
   useScreenWakeLock();
   const controls = useRef<HTMLElement>(null);
@@ -57,17 +57,19 @@ export function Lamp() {
   }, []);
 
   const toggleFullscreen = useCallback(async () => {
-    setFullscreenError("");
+    if (fullscreenRequest === "pending") return;
+    setFullscreenRequest("pending");
     try {
       if (document.fullscreenElement) {
         await document.exitFullscreen();
       } else {
         await surface.current?.requestFullscreen();
       }
+      setFullscreenRequest("idle");
     } catch {
-      setFullscreenError("Fullscreen couldn’t open. You can keep reading in this window.");
+      setFullscreenRequest("failed");
     }
-  }, []);
+  }, [fullscreenRequest]);
 
   const toggleControls = useCallback(() => {
     if (document.activeElement && controls.current?.contains(document.activeElement)) {
@@ -157,6 +159,7 @@ export function Lamp() {
                 <button
                   type="button"
                   onClick={toggleFullscreen}
+                  disabled={fullscreenRequest === "pending"}
                   aria-keyshortcuts="f"
                   class={`${controlClass} w-full justify-between`}
                 >
@@ -174,9 +177,9 @@ export function Lamp() {
                 </button>
               </div>
             )}
-            {fullscreenError && (
+            {fullscreenRequest === "failed" && (
               <p role="alert" class="px-3 pt-2 pb-3 leading-relaxed text-zinc-700">
-                {fullscreenError}
+                Fullscreen couldn’t open. You can keep reading in this window.
               </p>
             )}
           </section>

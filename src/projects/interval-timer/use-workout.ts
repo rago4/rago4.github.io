@@ -1,18 +1,61 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useReducer, useRef, useState } from "preact/hooks";
 
-type Status = "ready" | "running" | "paused" | "stopped" | "complete";
+type WorkoutState =
+  | { status: "ready" | "paused" | "stopped" | "complete"; elapsed: number }
+  | { status: "running"; elapsed: number; started: number; offset: number };
+
+type WorkoutEvent = {
+  type: "start" | "resume" | "pause" | "stop" | "reset" | "tick";
+  now: number;
+};
 
 const preparationSeconds = 3;
 
 export function useWorkout(duration: number, rounds: number) {
-  const [status, setStatus] = useState<Status>("ready");
-  const [elapsed, setElapsed] = useState(0);
   const [muted, setMuted] = useState(false);
-  const clock = useRef({ started: 0, elapsed: 0 });
   const audio = useRef<AudioContext | null>(null);
   const tone = useRef<OscillatorNode | null>(null);
   const total = preparationSeconds + duration;
   const roundDuration = duration / rounds;
+  const [state, dispatch] = useReducer(
+    (current: WorkoutState, event: WorkoutEvent): WorkoutState => {
+      const next =
+        current.status === "running"
+          ? Math.min(total, current.offset + (event.now - current.started) / 1000)
+          : current.elapsed;
+
+      switch (event.type) {
+        case "start":
+          if (
+            current.status !== "ready" &&
+            current.status !== "stopped" &&
+            current.status !== "complete"
+          )
+            return current;
+          return { status: "running", elapsed: 0, started: event.now, offset: 0 };
+        case "resume":
+          if (current.status !== "paused") return current;
+          return { status: "running", elapsed: next, started: event.now, offset: next };
+        case "pause":
+          if (current.status !== "running") return current;
+          return { status: next >= total ? "complete" : "paused", elapsed: next };
+        case "stop":
+          if (current.status !== "running" && current.status !== "paused") return current;
+          return { status: next >= total ? "complete" : "stopped", elapsed: next };
+        case "reset":
+          return { status: "ready", elapsed: 0 };
+        case "tick":
+          if (current.status !== "running") return current;
+          return next >= total
+            ? { status: "complete", elapsed: total }
+            : { ...current, elapsed: next };
+      }
+    },
+    { status: "ready", elapsed: 0 },
+  );
+  const { status, elapsed } = state;
+  const started = state.status === "running" ? state.started : null;
+  const offset = state.status === "running" ? state.offset : 0;
 
   function silence() {
     tone.current?.stop();
@@ -66,50 +109,34 @@ export function useWorkout(duration: number, rounds: number) {
     tone.current = oscillator;
   }
 
-  function currentElapsed() {
-    return Math.min(
-      total,
-      clock.current.elapsed + (performance.now() - clock.current.started) / 1000,
-    );
-  }
-
-  function run(offset: number) {
+  function run(type: "start" | "resume") {
+    if (
+      type === "resume"
+        ? status !== "paused"
+        : status !== "ready" && status !== "stopped" && status !== "complete"
+    )
+      return;
     audio.current ??= new AudioContext();
-    void audio.current
-      .resume()
-      .then(() => {
-        if (clock.current.started === started && tone.current === null)
-          scheduleSounds(currentElapsed());
-      })
-      .catch(() => {});
-    const started = performance.now();
-    clock.current = { started, elapsed: offset };
-    setElapsed(offset);
-    setStatus("running");
-    scheduleSounds(offset);
+    void audio.current.resume().catch(() => {});
+    dispatch({ type, now: performance.now() });
+    scheduleSounds(type === "resume" ? elapsed : 0);
   }
 
   function pause() {
-    const next = currentElapsed();
+    if (status !== "running") return;
     silence();
-    clock.current = { started: 0, elapsed: next };
-    setElapsed(next);
-    setStatus(next >= total ? "complete" : "paused");
+    dispatch({ type: "pause", now: performance.now() });
   }
 
   function stop() {
-    const next = status === "running" ? currentElapsed() : elapsed;
+    if (status !== "running" && status !== "paused") return;
     silence();
-    clock.current = { started: 0, elapsed: next };
-    setElapsed(next);
-    setStatus(next >= total ? "complete" : "stopped");
+    dispatch({ type: "stop", now: performance.now() });
   }
 
   function reset() {
     silence();
-    clock.current = { started: 0, elapsed: 0 };
-    setElapsed(0);
-    setStatus("ready");
+    dispatch({ type: "reset", now: performance.now() });
   }
 
   function toggleMute() {
@@ -122,17 +149,29 @@ export function useWorkout(duration: number, rounds: number) {
   useEffect(() => {
     if (status !== "running") return;
     const interval = window.setInterval(() => {
-      const next = currentElapsed();
-      setElapsed(next);
-      if (next >= total) setStatus("complete");
+      dispatch({ type: "tick", now: performance.now() });
     }, 50);
     return () => window.clearInterval(interval);
   }, [status, total]);
 
   useEffect(() => {
     if (muted) silence();
-    else if (status === "running") scheduleSounds(currentElapsed());
-  }, [muted]);
+    if (muted || started === null) return;
+
+    let cancelled = false;
+    const context = audio.current;
+    void context
+      ?.resume()
+      .then(() => {
+        if (!cancelled && tone.current === null) {
+          scheduleSounds(Math.min(total, offset + (performance.now() - started) / 1000));
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [muted, started, offset, total]);
 
   useEffect(
     () => () => {
@@ -156,8 +195,8 @@ export function useWorkout(duration: number, rounds: number) {
     preparationRemaining: Math.ceil(preparationSeconds - elapsed),
     totalRemaining: duration - workoutElapsed,
     workoutElapsed,
-    start: () => run(0),
-    resume: () => run(elapsed),
+    start: () => run("start"),
+    resume: () => run("resume"),
     pause,
     stop,
     reset,
