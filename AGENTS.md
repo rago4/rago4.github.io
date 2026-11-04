@@ -1,7 +1,10 @@
 # About
 
 This is a personal website built with Preact and hosted on GitHub Pages. Its goal
-is to list and host apps that I use for my own purposes.
+is to showcase my projects, share useful tools, and publish occasional writing.
+It also lists and hosts apps that I build and use for my own purposes, making
+them available for others to use too. The homepage introduces me and serves as
+the entry point to this content.
 
 # Documentation
 
