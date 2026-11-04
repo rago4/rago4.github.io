@@ -28,7 +28,12 @@ export function IntervalTimer() {
   const validMinutes =
     Number.isInteger(Number(minutes)) && Number(minutes) >= 1 && Number(minutes) <= 1440;
   const validRounds = Number.isInteger(count) && count >= 1 && count <= 1000;
-  const valid = validMinutes && validRounds && duration % count === 0;
+  const valid = validMinutes && validRounds;
+  const fractionalRounds = valid && duration % count !== 0;
+  const roundMilliseconds = valid ? Math.round((duration / count) * 1000) : 0;
+  const roundTime = fractionalRounds
+    ? `≈${formatTime(Math.floor(roundMilliseconds / 1000))}.${(roundMilliseconds % 1000).toString().padStart(3, "0")}`
+    : formatTime(valid ? duration / count : 0);
   const workout = useWorkout(valid ? duration : 1800, valid ? count : 10);
   const ready = workout.status === "ready";
   const ended = workout.status === "stopped" || workout.status === "complete";
@@ -126,24 +131,28 @@ export function IntervalTimer() {
                 <div
                   id="workout-detail"
                   aria-live="polite"
-                  class={`rounded-xl border px-4 py-4 text-sm ${valid ? "border-zinc-800 text-zinc-400" : "border-orange-400/40 text-orange-300"}`}
+                  class={`rounded-xl border px-4 py-4 text-sm ${valid && !fractionalRounds ? "border-zinc-800 text-zinc-400" : "border-orange-400/40 text-orange-300"}`}
                 >
                   {valid ? (
-                    <span class="flex items-center justify-between gap-3">
-                      <span>
-                        {count} rounds <span class="text-zinc-600">×</span>{" "}
-                        <strong class="font-medium text-zinc-100">
-                          {formatTime(duration / count)}
-                        </strong>
+                    <div class="space-y-3">
+                      <span class="flex flex-wrap items-center justify-between gap-3">
+                        <span>
+                          {count} rounds <span class="text-zinc-600">×</span>{" "}
+                          <strong class="font-medium text-zinc-100">{roundTime}</strong>
+                        </span>
+                        <span>per round</span>
                       </span>
-                      <span>per round</span>
-                    </span>
+                      {fractionalRounds && (
+                        <p class="leading-6">
+                          Rounds use fractional seconds to keep the workout exactly {minutes}{" "}
+                          {Number(minutes) === 1 ? "minute" : "minutes"}. You can start as usual.
+                        </p>
+                      )}
+                    </div>
                   ) : !validMinutes ? (
                     "Choose 1–1,440 whole minutes."
-                  ) : !validRounds ? (
-                    "Choose 1–1,000 whole rounds."
                   ) : (
-                    "Choose rounds that divide the workout into whole seconds."
+                    "Choose 1–1,000 whole rounds."
                   )}
                 </div>
 
@@ -210,7 +219,7 @@ export function IntervalTimer() {
                   class="block h-2 w-full overflow-hidden rounded-full accent-orange-400"
                 />
                 <div class="mt-4 flex justify-between gap-4 text-xs text-zinc-500 sm:text-sm">
-                  <span>{formatTime(duration / count)} / round</span>
+                  <span>{roundTime} / round</span>
                   <span>{formatTime(workout.totalRemaining)} remaining</span>
                 </div>
                 <div class="mt-10 grid grid-cols-2 gap-3">
