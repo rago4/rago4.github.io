@@ -26,18 +26,32 @@ export function Homepage() {
               A mix of projects, useful tools, and occasional writing.
             </p>
           </div>
-          <a
-            href="#/interval-timer"
-            class="block rounded-xl border border-zinc-200 p-5 transition hover:border-orange-400 sm:p-6 dark:border-zinc-800 dark:hover:border-orange-400"
-          >
-            <h3 class="font-semibold">
-              Interval timer <span aria-hidden="true">🏋️‍♂️</span>
-            </h3>
-            <p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              I built this for my kettlebell workouts. Set the duration and number of rounds, and it
-              handles the timing with a beep for each round.
-            </p>
-          </a>
+          <div class="space-y-3 sm:space-y-4">
+            <a
+              href="#/interval-timer"
+              class="block rounded-xl border border-zinc-200 p-5 transition hover:border-orange-400 sm:p-6 dark:border-zinc-800 dark:hover:border-orange-400"
+            >
+              <h3 class="font-semibold">
+                Interval timer <span aria-hidden="true">🏋️‍♂️</span>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                I built this for my kettlebell workouts. Set the duration and number of rounds, and
+                it handles the timing with a beep for each round.
+              </p>
+            </a>
+            <a
+              href="#/lamp"
+              class="block rounded-xl border border-zinc-200 p-5 transition hover:border-amber-400 sm:p-6 dark:border-zinc-800 dark:hover:border-amber-400"
+            >
+              <h3 class="font-semibold">
+                Reading lamp <span aria-hidden="true">💡</span>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                I usually read in a dark room, so I built this to use my monitor as a light for my
+                book. It has three simple modes: candle, warm light, and daylight.
+              </p>
+            </a>
+          </div>
         </section>
       </main>
     </div>
