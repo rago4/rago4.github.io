@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import { ArrowRight, ArrowUpRight, LampDesk, Timer } from "lucide-preact";
 
 const projects = [
@@ -69,10 +70,16 @@ export function Homepage() {
               <a
                 key={project.href}
                 href={project.href}
-                class={`group flex flex-col rounded-2xl border border-zinc-200 bg-zinc-50/50 p-6 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 sm:p-7 dark:border-zinc-800 dark:bg-zinc-900/30 dark:focus-visible:outline-blue-400 ${project.hoverClass}`}
+                class={cn(
+                  "group flex flex-col rounded-2xl border border-zinc-200 bg-zinc-50/50 p-6 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 sm:p-7 dark:border-zinc-800 dark:bg-zinc-900/30 dark:focus-visible:outline-blue-400",
+                  project.hoverClass,
+                )}
               >
                 <div
-                  class={`flex size-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 transition-colors dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 ${project.iconHoverClass}`}
+                  class={cn(
+                    "flex size-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 transition-colors dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300",
+                    project.iconHoverClass,
+                  )}
                 >
                   <project.icon aria-hidden="true" class="size-5" />
                 </div>
