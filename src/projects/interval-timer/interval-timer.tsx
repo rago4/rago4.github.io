@@ -7,6 +7,7 @@ import {
   RotateCcw,
   Settings2,
   Square,
+  Timer,
   Volume2,
   VolumeX,
 } from "lucide-preact";
@@ -39,13 +40,13 @@ export function IntervalTimer() {
   const ended = workout.status === "stopped" || workout.status === "complete";
   const completed = workout.status === "complete";
   const primaryButton =
-    "inline-flex min-h-16 items-center justify-center gap-3 rounded-2xl bg-orange-400 px-8 text-lg font-semibold text-zinc-950 transition hover:bg-orange-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400 disabled:cursor-not-allowed disabled:opacity-40";
+    "inline-flex min-h-16 items-center justify-center gap-2 rounded-2xl bg-orange-400 px-3 text-base font-semibold text-zinc-950 transition hover:bg-orange-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400 disabled:cursor-not-allowed disabled:opacity-40 sm:gap-3 sm:px-6 sm:text-lg";
   const secondaryButton =
-    "inline-flex min-h-16 items-center justify-center gap-3 rounded-2xl border border-zinc-700 px-6 text-base font-medium text-zinc-200 transition hover:border-zinc-500 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400";
+    "inline-flex min-h-16 items-center justify-center gap-2 rounded-2xl border border-zinc-700 px-3 text-base font-medium text-zinc-200 transition hover:border-zinc-500 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400 sm:gap-3 sm:px-6";
 
   return (
     <div class="min-h-screen bg-zinc-950 font-geist-mono text-zinc-100 scheme-dark">
-      <div class="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-5 py-12 sm:px-10 sm:py-16">
+      <div class="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-4 py-6 sm:px-10 sm:py-12">
         <nav aria-label="Site navigation" class="mx-auto mb-6 w-full max-w-xl">
           <a
             href="#/"
@@ -54,16 +55,20 @@ export function IntervalTimer() {
             <ArrowLeft size={16} /> Back to homepage
           </a>
         </nav>
-        <header class="mx-auto mb-10 flex w-full max-w-xl items-center justify-between gap-4">
-          <h1 class="text-3xl font-semibold tracking-tight">
-            Interval timer <span aria-hidden="true">🏋️‍♂️</span>
-          </h1>
+        <header class="mx-auto mb-8 flex w-full max-w-xl items-center justify-between gap-3">
+          <div>
+            <h1 class="flex items-center gap-3 text-xl font-semibold tracking-tight sm:text-3xl">
+              <Timer size={24} aria-hidden="true" class="shrink-0 text-orange-400" />
+              Interval timer
+            </h1>
+          </div>
           <button
             type="button"
             onClick={workout.toggleMute}
             aria-label={workout.muted ? "Unmute sounds" : "Mute sounds"}
             aria-pressed={workout.muted}
-            class="rounded-xl p-3 text-zinc-400 transition hover:bg-zinc-900 hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-orange-400"
+            title={workout.muted ? "Unmute sounds" : "Mute sounds"}
+            class="shrink-0 rounded-xl border border-zinc-800 bg-zinc-900 p-3 text-zinc-400 transition hover:border-zinc-600 hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400"
           >
             {workout.muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
           </button>
@@ -73,14 +78,20 @@ export function IntervalTimer() {
           {ready ? (
             <div class="mx-auto w-full max-w-xl">
               <form
-                class="space-y-8"
+                class="space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900/30 p-5 sm:p-8"
                 onSubmit={(event) => {
                   event.preventDefault();
                   if (valid) workout.start();
                 }}
               >
+                <div>
+                  <h2 class="text-lg font-medium">Your workout</h2>
+                  <p class="mt-1 text-sm leading-6 text-zinc-400">
+                    Split your time into equal rounds.
+                  </p>
+                </div>
                 <fieldset>
-                  <legend class="mb-3 text-sm text-zinc-300">Workout duration</legend>
+                  <legend class="mb-3 text-sm text-zinc-300">Quick duration</legend>
                   <div class="grid grid-cols-4 gap-2 sm:gap-3">
                     {[15, 20, 25, 30].map((preset) => (
                       <button
@@ -98,7 +109,7 @@ export function IntervalTimer() {
                 </fieldset>
 
                 <div class="grid grid-cols-2 gap-4">
-                  <label class="space-y-3 text-sm text-zinc-300">
+                  <label class="min-w-0 space-y-2 text-sm text-zinc-300">
                     <span class="block">Minutes</span>
                     <input
                       type="number"
@@ -108,11 +119,12 @@ export function IntervalTimer() {
                       required
                       value={minutes}
                       onInput={(event) => setMinutes(event.currentTarget.value)}
+                      aria-invalid={!validMinutes}
                       aria-describedby="workout-detail"
                       class="min-h-16 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-4 text-xl text-zinc-100 outline-none focus:border-orange-400"
                     />
                   </label>
-                  <label class="space-y-3 text-sm text-zinc-300">
+                  <label class="min-w-0 space-y-2 text-sm text-zinc-300">
                     <span class="block">Rounds</span>
                     <input
                       type="number"
@@ -122,6 +134,7 @@ export function IntervalTimer() {
                       required
                       value={rounds}
                       onInput={(event) => setRounds(event.currentTarget.value)}
+                      aria-invalid={!validRounds}
                       aria-describedby="workout-detail"
                       class="min-h-16 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-4 text-xl text-zinc-100 outline-none focus:border-orange-400"
                     />
@@ -131,17 +144,23 @@ export function IntervalTimer() {
                 <div
                   id="workout-detail"
                   aria-live="polite"
-                  class={`rounded-xl border px-4 py-4 text-sm ${valid && !fractionalRounds ? "border-zinc-800 text-zinc-400" : "border-orange-400/40 text-orange-300"}`}
+                  class={`rounded-2xl border bg-zinc-950 p-4 text-sm sm:p-5 ${valid && !fractionalRounds ? "border-zinc-800 text-zinc-400" : "border-orange-400/40 text-orange-300"}`}
                 >
                   {valid ? (
                     <div class="space-y-3">
-                      <span class="flex flex-wrap items-center justify-between gap-3">
-                        <span>
-                          {count} rounds <span class="text-zinc-600">×</span>{" "}
-                          <strong class="font-medium text-zinc-100">{roundTime}</strong>
+                      <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                        <span>Time per round</span>
+                        <strong class="text-2xl font-medium tracking-tight text-zinc-100 tabular-nums">
+                          {roundTime}
+                        </strong>
+                      </div>
+                      <p class="border-t border-zinc-800 pt-3 text-xs leading-5">
+                        {minutes} {Number(minutes) === 1 ? "minute" : "minutes"}
+                        <span aria-hidden="true" class="px-2 text-zinc-600">
+                          /
                         </span>
-                        <span>per round</span>
-                      </span>
+                        {count} {count === 1 ? "round" : "rounds"}
+                      </p>
                       {fractionalRounds && (
                         <p class="leading-6">
                           Rounds use fractional seconds to keep the workout exactly {minutes}{" "}
@@ -161,13 +180,13 @@ export function IntervalTimer() {
                     Start workout <ArrowRight size={22} />
                   </button>
                   <p class="text-center text-xs leading-6 text-zinc-500">
-                    Starts after a 3-second countdown.
+                    3-second countdown before your first round.
                   </p>
                 </div>
               </form>
             </div>
           ) : (
-            <div class="text-center">
+            <div class="mx-auto w-full max-w-xl rounded-3xl border border-zinc-800 bg-zinc-900/30 px-5 py-8 text-center sm:p-8">
               <div
                 role="status"
                 class="mb-6 flex min-h-8 items-center justify-center gap-2 text-sm font-medium tracking-widest text-orange-400 uppercase"
@@ -197,7 +216,7 @@ export function IntervalTimer() {
                 )}
               </h2>
               <div
-                class={`my-6 text-7xl leading-none font-semibold tracking-tighter tabular-nums sm:text-9xl lg:text-9xl ${workout.preparing && !ended ? "text-orange-400" : "text-zinc-50"}`}
+                class={`my-6 text-6xl leading-none font-semibold tracking-tighter tabular-nums sm:text-8xl ${workout.preparing && !ended ? "text-orange-400" : "text-zinc-50"}`}
               >
                 {workout.preparing && !ended
                   ? workout.preparationRemaining
@@ -211,18 +230,18 @@ export function IntervalTimer() {
                     : "left this round"}
               </p>
 
-              <div class="mx-auto mt-10 max-w-xl">
+              <div class="mt-8 border-t border-zinc-800 pt-6">
                 <progress
                   aria-label="Workout progress"
                   max={duration}
                   value={workout.workoutElapsed}
                   class="block h-2 w-full overflow-hidden rounded-full accent-orange-400"
                 />
-                <div class="mt-4 flex justify-between gap-4 text-xs text-zinc-500 sm:text-sm">
+                <div class="mt-4 flex flex-wrap justify-between gap-x-4 gap-y-2 text-xs text-zinc-400 sm:text-sm">
                   <span>{roundTime} / round</span>
                   <span>{formatTime(workout.totalRemaining)} remaining</span>
                 </div>
-                <div class="mt-10 grid grid-cols-2 gap-3">
+                <div class="mt-8 grid grid-cols-2 gap-3">
                   {ended ? (
                     <>
                       <button type="button" onClick={workout.start} class={primaryButton}>
