@@ -2,6 +2,7 @@ import { Route, Router } from "wouter-preact";
 import { useHashLocation } from "wouter-preact/use-hash-location";
 import { Homepage } from "./projects/homepage/homepage.tsx";
 import { IntervalTimer } from "./projects/interval-timer/interval-timer.tsx";
+import { PizzaDoughCalculator } from "./projects/pizza-dough/pizza-dough-calculator.tsx";
 import { Lamp } from "./projects/lamp/lamp.tsx";
 
 export function App() {
@@ -9,6 +10,7 @@ export function App() {
     <Router hook={useHashLocation}>
       <Route path="/" component={Homepage} />
       <Route path="/interval-timer" component={IntervalTimer} />
+      <Route path="/pizza-dough" component={PizzaDoughCalculator} />
       <Route path="/lamp" component={Lamp} />
     </Router>
   );
