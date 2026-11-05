@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import {
   ArrowLeft,
   EyeOff,
@@ -107,7 +108,10 @@ export function Lamp() {
   return (
     <div
       ref={surface}
-      class={`flex min-h-dvh flex-col font-geist-mono text-zinc-900 scheme-light ${mode.background}`}
+      class={cn(
+        "flex min-h-dvh flex-col font-geist-mono text-zinc-900 scheme-light",
+        mode.background,
+      )}
     >
       <nav aria-label="Site navigation" class="px-5 py-4 sm:px-8">
         <a href="#/" class={controlClass}>
@@ -136,7 +140,12 @@ export function Lamp() {
                     type="button"
                     aria-pressed={mode.id === option.id}
                     onClick={() => setMode(option)}
-                    class={`relative flex min-h-16 flex-col items-center justify-center gap-2 rounded-lg px-1 py-3 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 ${mode.id === option.id ? "bg-white/80 text-zinc-900 shadow-sm ring-1 ring-zinc-900/5" : "text-zinc-600 hover:bg-white/30 hover:text-zinc-900"}`}
+                    class={cn(
+                      "relative flex min-h-16 flex-col items-center justify-center gap-2 rounded-lg px-1 py-3 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900",
+                      mode.id === option.id
+                        ? "bg-white/80 text-zinc-900 shadow-sm ring-1 ring-zinc-900/5"
+                        : "text-zinc-600 hover:bg-white/30 hover:text-zinc-900",
+                    )}
                   >
                     <option.icon size={18} strokeWidth={1.5} aria-hidden="true" />
                     {option.name}
@@ -161,7 +170,7 @@ export function Lamp() {
                   onClick={toggleFullscreen}
                   disabled={fullscreenRequest === "pending"}
                   aria-keyshortcuts="f"
-                  class={`${controlClass} w-full justify-between`}
+                  class={cn(controlClass, "w-full justify-between")}
                 >
                   <span class="flex items-center gap-2">
                     {fullscreen ? (
@@ -192,7 +201,13 @@ export function Lamp() {
             aria-controls="lamp-controls"
             aria-expanded={controlsVisible}
             aria-keyshortcuts="h"
-            class={`${controlClass} justify-center ${controlsVisible ? "absolute top-2 right-2" : "border border-white/40 bg-white/30 shadow-sm"}`}
+            class={cn(
+              controlClass,
+              "justify-center",
+              controlsVisible
+                ? "absolute top-2 right-2"
+                : "border border-white/40 bg-white/30 shadow-sm",
+            )}
           >
             {controlsVisible ? (
               <EyeOff size={16} strokeWidth={1.5} aria-hidden="true" />

@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import {
   ArrowLeft,
   ArrowRight,
@@ -99,7 +100,12 @@ export function IntervalTimer() {
                         type="button"
                         aria-pressed={minutes === String(preset)}
                         onClick={() => setMinutes(String(preset))}
-                        class={`min-h-16 rounded-xl border text-lg font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 ${minutes === String(preset) ? "border-orange-400 bg-orange-400/10 text-orange-400" : "border-zinc-800 bg-zinc-900 text-zinc-300 hover:border-zinc-600"}`}
+                        class={cn(
+                          "min-h-16 rounded-xl border text-lg font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
+                          minutes === String(preset)
+                            ? "border-orange-400 bg-orange-400/10 text-orange-400"
+                            : "border-zinc-800 bg-zinc-900 text-zinc-300 hover:border-zinc-600",
+                        )}
                       >
                         {preset}
                         <span class="mt-1 block text-xs font-normal">min</span>
@@ -144,7 +150,12 @@ export function IntervalTimer() {
                 <div
                   id="workout-detail"
                   aria-live="polite"
-                  class={`rounded-2xl border bg-zinc-950 p-4 text-sm sm:p-5 ${valid && !fractionalRounds ? "border-zinc-800 text-zinc-400" : "border-orange-400/40 text-orange-300"}`}
+                  class={cn(
+                    "rounded-2xl border bg-zinc-950 p-4 text-sm sm:p-5",
+                    valid && !fractionalRounds
+                      ? "border-zinc-800 text-zinc-400"
+                      : "border-orange-400/40 text-orange-300",
+                  )}
                 >
                   {valid ? (
                     <div class="space-y-3">
@@ -176,7 +187,7 @@ export function IntervalTimer() {
                 </div>
 
                 <div class="space-y-3">
-                  <button type="submit" disabled={!valid} class={`${primaryButton} w-full`}>
+                  <button type="submit" disabled={!valid} class={cn(primaryButton, "w-full")}>
                     Start workout <ArrowRight size={22} />
                   </button>
                   <p class="text-center text-xs leading-6 text-zinc-500">
@@ -216,7 +227,10 @@ export function IntervalTimer() {
                 )}
               </h2>
               <div
-                class={`my-6 text-6xl leading-none font-semibold tracking-tighter tabular-nums sm:text-8xl ${workout.preparing && !ended ? "text-orange-400" : "text-zinc-50"}`}
+                class={cn(
+                  "my-6 text-6xl leading-none font-semibold tracking-tighter tabular-nums sm:text-8xl",
+                  workout.preparing && !ended ? "text-orange-400" : "text-zinc-50",
+                )}
               >
                 {workout.preparing && !ended
                   ? workout.preparationRemaining
