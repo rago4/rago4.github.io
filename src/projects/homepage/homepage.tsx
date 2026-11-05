@@ -1,5 +1,4 @@
-import { cn } from "cn";
-import { ArrowRight, ArrowUpRight, LampDesk, Timer } from "lucide-preact";
+import { ArrowRight, ArrowUpRight, LampDesk, Pizza, Timer } from "lucide-preact";
 
 const projects = [
   {
@@ -7,22 +6,23 @@ const projects = [
     href: "#/interval-timer",
     icon: Timer,
     description:
-      "I built this for my kettlebell workouts. Set the duration and number of rounds, and it beeps at the end of each round.",
-    hoverClass:
-      "hover:border-orange-400 hover:bg-orange-50/50 dark:hover:border-orange-400 dark:hover:bg-orange-950/20",
-    iconHoverClass: "group-hover:text-orange-600 dark:group-hover:text-orange-400",
+      "I built this for my kettlebell workouts. Set a duration and number of rounds, with a beep after each round.",
+  },
+  {
+    name: "Pizza dough calculator",
+    href: "#/pizza-dough",
+    icon: Pizza,
+    description:
+      "I built this to keep my pizza dough recipes repeatable. Choose a recipe, then adjust the dough balls and ingredients.",
   },
   {
     name: "Reading lamp",
     href: "#/lamp",
     icon: LampDesk,
     description:
-      "I built this to read in a dark room, using my monitor as a light for my book. It has candle, warm light, and daylight modes.",
-    hoverClass:
-      "hover:border-amber-400 hover:bg-amber-50/50 dark:hover:border-amber-400 dark:hover:bg-amber-950/20",
-    iconHoverClass: "group-hover:text-amber-600 dark:group-hover:text-amber-400",
+      "I built this to use my monitor as a reading light in a dark room. Choose candle, warm light, or daylight.",
   },
-];
+].sort((a, b) => a.name.localeCompare(b.name, "en"));
 
 export function Homepage() {
   const socialLinkClass =
@@ -65,40 +65,30 @@ export function Homepage() {
               Projects, useful tools, and occasional writing.
             </p>
           </div>
-          <div class="mt-6 grid gap-4 sm:grid-cols-2">
+          <ul class="mt-6 space-y-3">
             {projects.map((project) => (
-              <a
-                key={project.href}
-                href={project.href}
-                class={cn(
-                  "group flex flex-col rounded-2xl border border-zinc-200 bg-zinc-50/50 p-6 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 sm:p-7 dark:border-zinc-800 dark:bg-zinc-900/30 dark:focus-visible:outline-blue-400",
-                  project.hoverClass,
-                )}
-              >
-                <div
-                  class={cn(
-                    "flex size-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 transition-colors dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300",
-                    project.iconHoverClass,
-                  )}
+              <li key={project.href}>
+                <a
+                  href={project.href}
+                  class="group flex flex-wrap items-center gap-x-3 gap-y-3 rounded-2xl border border-zinc-200 bg-zinc-50/50 p-5 transition-colors hover:border-orange-400 hover:bg-orange-50/50 focus-visible:border-orange-400 focus-visible:bg-orange-50/50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600 sm:flex-nowrap sm:items-start sm:gap-4 dark:border-zinc-800 dark:bg-zinc-900/30 dark:hover:border-orange-400 dark:hover:bg-orange-950/20 dark:focus-visible:border-orange-400 dark:focus-visible:bg-orange-950/20 dark:focus-visible:outline-orange-400"
                 >
-                  <project.icon aria-hidden="true" class="size-5" />
-                </div>
-                <h3 class="mt-5 font-semibold">{project.name}</h3>
-                <p class="mt-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                  {project.description}
-                </p>
-                <div class="mt-auto pt-6">
-                  <span class="flex items-center justify-between gap-3 border-t border-zinc-200 pt-4 text-xs font-medium dark:border-zinc-800">
-                    Open
-                    <ArrowRight
-                      aria-hidden="true"
-                      class="size-4 text-zinc-500 motion-safe:transition-transform motion-safe:group-hover:translate-x-1 dark:text-zinc-400"
-                    />
+                  <span class="order-1 flex size-10 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 transition-colors group-hover:text-orange-600 group-focus-visible:text-orange-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:group-hover:text-orange-400 dark:group-focus-visible:text-orange-400">
+                    <project.icon aria-hidden="true" class="size-5" />
                   </span>
-                </div>
-              </a>
+                  <div class="contents sm:order-2 sm:block sm:min-w-0 sm:flex-1 sm:pt-1">
+                    <h3 class="order-2 min-w-0 flex-1 font-semibold leading-6">{project.name}</h3>
+                    <p class="order-4 basis-full text-sm leading-relaxed text-zinc-600 sm:mt-2 dark:text-zinc-400">
+                      {project.description}
+                    </p>
+                  </div>
+                  <ArrowRight
+                    aria-hidden="true"
+                    class="order-3 size-4 shrink-0 self-center text-zinc-500 transition-colors group-hover:text-orange-600 group-focus-visible:text-orange-600 motion-safe:transition motion-safe:group-hover:translate-x-1 motion-safe:group-focus-visible:translate-x-1 dark:text-zinc-400 dark:group-hover:text-orange-400 dark:group-focus-visible:text-orange-400"
+                  />
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       </main>
     </div>
