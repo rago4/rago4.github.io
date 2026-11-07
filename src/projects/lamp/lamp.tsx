@@ -10,6 +10,7 @@ import {
   Sun,
 } from "lucide-preact";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { usePageTitle } from "../../use-page-title.ts";
 import { useScreenWakeLock } from "./use-screen-wake-lock.ts";
 
 const modes = [
@@ -37,6 +38,8 @@ const modes = [
 ] as const;
 
 export function Lamp() {
+  usePageTitle("Reading lamp");
+
   const [mode, setMode] = useState<(typeof modes)[number]>(modes[1]);
   const [fullscreen, setFullscreen] = useState(false);
   const [fullscreenRequest, setFullscreenRequest] = useState<"idle" | "pending" | "failed">("idle");

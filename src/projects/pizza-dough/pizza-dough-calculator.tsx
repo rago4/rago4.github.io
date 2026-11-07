@@ -1,6 +1,7 @@
 import { cn } from "cn";
 import { ArrowLeft, ArrowUpRight, Check, Pizza, RotateCcw } from "lucide-preact";
 import { useState } from "preact/hooks";
+import { usePageTitle } from "../../use-page-title.ts";
 import { calculateDough, defaultPreset, formatAmount, ingredients, presets } from "./dough.ts";
 import type { DoughFields } from "./dough.ts";
 
@@ -13,6 +14,8 @@ const percentageFields = ingredients.map((item) => ({ ...item, step: "any" }));
 const allFields = [...portionFields, ...percentageFields];
 
 export function PizzaDoughCalculator() {
+  usePageTitle("Pizza dough calculator");
+
   const [preset, setPreset] = useState(defaultPreset);
   const [fields, setFields] = useState<DoughFields>({ ...defaultPreset.fields });
   const errors = Object.fromEntries(

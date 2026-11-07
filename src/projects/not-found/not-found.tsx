@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "preact/hooks";
+import { usePageTitle } from "../../use-page-title.ts";
 
 type SceneState = "loading" | "ready" | "unavailable";
 
 export function NotFound() {
+  usePageTitle("404: Page not found");
+
   const stage = useRef<HTMLDivElement>(null);
   const [scene, setScene] = useState<SceneState>("loading");
 
