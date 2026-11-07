@@ -1,5 +1,5 @@
 import { ArrowRight, ArrowUpRight, LampDesk, Pizza, Timer } from "lucide-preact";
-import { usePageTitle } from "../../use-page-title.ts";
+import { usePageTitle } from "@/use-page-title.ts";
 
 const projects = [
   {

@@ -10,7 +10,7 @@ import {
   Sun,
 } from "lucide-preact";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
-import { usePageTitle } from "../../use-page-title.ts";
+import { usePageTitle } from "@/use-page-title.ts";
 import { useScreenWakeLock } from "./use-screen-wake-lock.ts";
 
 const modes = [

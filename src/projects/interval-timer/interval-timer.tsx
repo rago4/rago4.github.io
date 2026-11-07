@@ -13,7 +13,7 @@ import {
   VolumeX,
 } from "lucide-preact";
 import { useState } from "preact/hooks";
-import { usePageTitle } from "../../use-page-title.ts";
+import { usePageTitle } from "@/use-page-title.ts";
 import { useWorkout } from "./use-workout.ts";
 
 function formatTime(seconds: number) {

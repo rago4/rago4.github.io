@@ -5,6 +5,9 @@ import { copyFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 export default defineConfig({
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
     preact(),
     tailwindcss(),

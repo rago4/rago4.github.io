@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { usePageTitle } from "../../use-page-title.ts";
+import { usePageTitle } from "@/use-page-title.ts";
 
 type SceneState = "loading" | "ready" | "unavailable";
 

@@ -1,7 +1,7 @@
 import { cn } from "cn";
 import { ArrowLeft, ArrowUpRight, Check, Pizza, RotateCcw } from "lucide-preact";
 import { useState } from "preact/hooks";
-import { usePageTitle } from "../../use-page-title.ts";
+import { usePageTitle } from "@/use-page-title.ts";
 import { calculateDough, defaultPreset, formatAmount, ingredients, presets } from "./dough.ts";
 import type { DoughFields } from "./dough.ts";
 
