@@ -13,6 +13,7 @@ import {
   VolumeX,
 } from "lucide-preact";
 import { useState } from "preact/hooks";
+import { usePageTitle } from "@/use-page-title.ts";
 import { useWorkout } from "./use-workout.ts";
 
 function formatTime(seconds: number) {
@@ -23,6 +24,8 @@ function formatTime(seconds: number) {
 }
 
 export function IntervalTimer() {
+  usePageTitle("Interval timer");
+
   const [minutes, setMinutes] = useState("30");
   const [rounds, setRounds] = useState("10");
   const duration = Number(minutes) * 60;

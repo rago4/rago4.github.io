@@ -1,4 +1,5 @@
 import { ArrowRight, ArrowUpRight, LampDesk, Pizza, Timer } from "lucide-preact";
+import { usePageTitle } from "@/use-page-title.ts";
 
 const projects = [
   {
@@ -25,6 +26,8 @@ const projects = [
 ].sort((a, b) => a.name.localeCompare(b.name, "en"));
 
 export function Homepage() {
+  usePageTitle();
+
   const socialLinkClass =
     "inline-flex min-h-11 items-center gap-2 rounded-sm text-sm text-blue-600 underline decoration-blue-600/30 underline-offset-4 transition-colors hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 dark:text-blue-400 dark:decoration-blue-400/30 dark:focus-visible:outline-blue-400";
 
