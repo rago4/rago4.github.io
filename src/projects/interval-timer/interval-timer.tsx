@@ -28,18 +28,17 @@ export function IntervalTimer() {
 
   const [minutes, setMinutes] = useState("30");
   const [rounds, setRounds] = useState("10");
-  const duration = Number(minutes) * 60;
+  const requestedDuration = Number(minutes) * 60;
   const count = Number(rounds);
   const validMinutes =
     Number.isInteger(Number(minutes)) && Number(minutes) >= 1 && Number(minutes) <= 1440;
   const validRounds = Number.isInteger(count) && count >= 1 && count <= 1000;
   const valid = validMinutes && validRounds;
-  const fractionalRounds = valid && duration % count !== 0;
-  const roundMilliseconds = valid ? Math.round((duration / count) * 1000) : 0;
-  const roundTime = fractionalRounds
-    ? `≈${formatTime(Math.floor(roundMilliseconds / 1000))}.${(roundMilliseconds % 1000).toString().padStart(3, "0")}`
-    : formatTime(valid ? duration / count : 0);
-  const workout = useWorkout(valid ? duration : 1800, valid ? count : 10);
+  const roundDuration = valid ? Math.max(1, Math.round(requestedDuration / count)) : 180;
+  const duration = roundDuration * (valid ? count : 10);
+  const roundedRounds = valid && duration !== requestedDuration;
+  const roundTime = formatTime(valid ? roundDuration : 0);
+  const workout = useWorkout(duration, valid ? count : 10);
   const ready = workout.status === "ready";
   const ended = workout.status === "stopped" || workout.status === "complete";
   const completed = workout.status === "complete";
@@ -187,16 +186,16 @@ export function IntervalTimer() {
                         </strong>
                       </div>
                       <p class="border-t border-zinc-200 dark:border-zinc-800 pt-3 text-xs leading-5">
-                        {minutes} {Number(minutes) === 1 ? "minute" : "minutes"}
+                        {minutes} {Number(minutes) === 1 ? "minute" : "minutes"} requested
                         <span aria-hidden="true" class="px-2 text-zinc-500 dark:text-zinc-400">
                           /
                         </span>
                         {count} {count === 1 ? "round" : "rounds"}
                       </p>
-                      {fractionalRounds && (
+                      {roundedRounds && (
                         <p class="leading-6">
-                          Rounds use fractional seconds to keep the workout exactly {minutes}{" "}
-                          {Number(minutes) === 1 ? "minute" : "minutes"}. You can start as usual.
+                          Each round is rounded to the nearest second. Actual total:{" "}
+                          {formatTime(duration)}.
                         </p>
                       )}
                     </div>
