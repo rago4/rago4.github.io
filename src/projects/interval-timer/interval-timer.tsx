@@ -28,33 +28,39 @@ export function IntervalTimer() {
 
   const [minutes, setMinutes] = useState("30");
   const [rounds, setRounds] = useState("10");
-  const duration = Number(minutes) * 60;
+  const requestedDuration = Number(minutes) * 60;
   const count = Number(rounds);
   const validMinutes =
     Number.isInteger(Number(minutes)) && Number(minutes) >= 1 && Number(minutes) <= 1440;
   const validRounds = Number.isInteger(count) && count >= 1 && count <= 1000;
   const valid = validMinutes && validRounds;
-  const fractionalRounds = valid && duration % count !== 0;
-  const roundMilliseconds = valid ? Math.round((duration / count) * 1000) : 0;
-  const roundTime = fractionalRounds
-    ? `≈${formatTime(Math.floor(roundMilliseconds / 1000))}.${(roundMilliseconds % 1000).toString().padStart(3, "0")}`
-    : formatTime(valid ? duration / count : 0);
-  const workout = useWorkout(valid ? duration : 1800, valid ? count : 10);
+  const roundDuration = valid ? Math.max(1, Math.round(requestedDuration / count)) : 180;
+  const duration = roundDuration * (valid ? count : 10);
+  const roundedRounds = valid && duration !== requestedDuration;
+  const roundTime = formatTime(valid ? roundDuration : 0);
+  const workout = useWorkout(duration, valid ? count : 10);
   const ready = workout.status === "ready";
   const ended = workout.status === "stopped" || workout.status === "complete";
   const completed = workout.status === "complete";
   const primaryButton =
-    "inline-flex min-h-16 items-center justify-center gap-2 rounded-2xl bg-orange-400 px-3 text-base font-semibold text-zinc-950 transition hover:bg-orange-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400 disabled:cursor-not-allowed disabled:opacity-40 sm:gap-3 sm:px-6 sm:text-lg";
+    "inline-flex min-h-16 items-center justify-center gap-2 rounded-2xl bg-orange-700 dark:bg-orange-400 px-3 text-base font-semibold text-white dark:text-zinc-950 transition hover:bg-orange-800 active:bg-orange-900 dark:hover:bg-orange-300 dark:active:bg-orange-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600 dark:focus-visible:outline-orange-400 disabled:cursor-not-allowed disabled:opacity-40 sm:gap-3 sm:px-6 sm:text-lg";
   const secondaryButton =
-    "inline-flex min-h-16 items-center justify-center gap-2 rounded-2xl border border-zinc-700 px-3 text-base font-medium text-zinc-200 transition hover:border-zinc-500 hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400 sm:gap-3 sm:px-6";
+    "inline-flex min-h-16 items-center justify-center gap-2 rounded-2xl border border-zinc-300 dark:border-zinc-700 px-3 text-base font-medium text-zinc-700 dark:text-zinc-300 transition hover:border-zinc-400 dark:hover:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600 dark:focus-visible:outline-orange-400 sm:gap-3 sm:px-6";
+
+  const inputClass =
+    "min-h-16 w-full rounded-xl border bg-white px-4 text-xl text-zinc-950 outline-none transition-colors focus:ring-1 dark:bg-zinc-950 dark:text-zinc-50";
+  const validInputClass =
+    "border-zinc-300 hover:border-zinc-400 focus:border-orange-600 focus:ring-orange-600 dark:border-zinc-700 dark:hover:border-zinc-600 dark:focus:border-orange-400 dark:focus:ring-orange-400";
+  const invalidInputClass =
+    "border-red-600 focus:border-red-600 focus:ring-red-600 dark:border-red-400 dark:focus:border-red-400 dark:focus:ring-red-400";
 
   return (
-    <div class="min-h-screen bg-zinc-950 font-geist-mono text-zinc-100 scheme-dark">
+    <div class="min-h-screen bg-white dark:bg-zinc-950 font-geist-mono text-zinc-950 dark:text-zinc-50 scheme-light-dark">
       <div class="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-4 py-6 sm:px-10 sm:py-12">
         <nav aria-label="Site navigation" class="mx-auto mb-6 w-full max-w-xl">
           <a
             href="#/"
-            class="inline-flex min-h-11 items-center gap-2 rounded-lg text-sm text-zinc-400 transition hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400"
+            class="inline-flex min-h-11 items-center gap-2 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 transition hover:text-zinc-950 dark:hover:text-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600 dark:focus-visible:outline-orange-400"
           >
             <ArrowLeft size={16} /> Back to homepage
           </a>
@@ -62,7 +68,11 @@ export function IntervalTimer() {
         <header class="mx-auto mb-8 flex w-full max-w-xl items-center justify-between gap-3">
           <div>
             <h1 class="flex items-center gap-3 text-xl font-semibold tracking-tight sm:text-3xl">
-              <Timer size={24} aria-hidden="true" class="shrink-0 text-orange-400" />
+              <Timer
+                size={24}
+                aria-hidden="true"
+                class="shrink-0 text-orange-700 dark:text-orange-400"
+              />
               Interval timer
             </h1>
           </div>
@@ -72,7 +82,12 @@ export function IntervalTimer() {
             aria-label={workout.muted ? "Unmute sounds" : "Mute sounds"}
             aria-pressed={workout.muted}
             title={workout.muted ? "Unmute sounds" : "Mute sounds"}
-            class="shrink-0 rounded-xl border border-zinc-800 bg-zinc-900 p-3 text-zinc-400 transition hover:border-zinc-600 hover:text-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-400"
+            class={cn(
+              "shrink-0 rounded-xl border p-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-orange-600 dark:focus-visible:outline-orange-400",
+              workout.muted
+                ? "border-orange-600 bg-orange-50 text-orange-700 dark:border-orange-400 dark:bg-orange-950/30 dark:text-orange-400"
+                : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400 hover:text-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-50",
+            )}
           >
             {workout.muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
           </button>
@@ -82,7 +97,7 @@ export function IntervalTimer() {
           {ready ? (
             <div class="mx-auto w-full max-w-xl">
               <form
-                class="space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900/30 p-5 sm:p-8"
+                class="space-y-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-5 sm:p-8"
                 onSubmit={(event) => {
                   event.preventDefault();
                   if (valid) workout.start();
@@ -90,12 +105,14 @@ export function IntervalTimer() {
               >
                 <div>
                   <h2 class="text-lg font-medium">Your workout</h2>
-                  <p class="mt-1 text-sm leading-6 text-zinc-400">
+                  <p class="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
                     Split your time into equal rounds.
                   </p>
                 </div>
                 <fieldset>
-                  <legend class="mb-3 text-sm text-zinc-300">Quick duration</legend>
+                  <legend class="mb-3 text-sm text-zinc-700 dark:text-zinc-300">
+                    Quick duration
+                  </legend>
                   <div class="grid grid-cols-4 gap-2 sm:gap-3">
                     {[15, 20, 25, 30].map((preset) => (
                       <button
@@ -104,10 +121,10 @@ export function IntervalTimer() {
                         aria-pressed={minutes === String(preset)}
                         onClick={() => setMinutes(String(preset))}
                         class={cn(
-                          "min-h-16 rounded-xl border text-lg font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400",
+                          "min-h-16 rounded-xl border text-lg font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 dark:focus-visible:outline-orange-400",
                           minutes === String(preset)
-                            ? "border-orange-400 bg-orange-400/10 text-orange-400"
-                            : "border-zinc-800 bg-zinc-900 text-zinc-300 hover:border-zinc-600",
+                            ? "border-orange-600 dark:border-orange-400 bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-400"
+                            : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-600",
                         )}
                       >
                         {preset}
@@ -118,7 +135,7 @@ export function IntervalTimer() {
                 </fieldset>
 
                 <div class="grid grid-cols-2 gap-4">
-                  <label class="min-w-0 space-y-2 text-sm text-zinc-300">
+                  <label class="min-w-0 space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
                     <span class="block">Minutes</span>
                     <input
                       type="number"
@@ -130,10 +147,10 @@ export function IntervalTimer() {
                       onInput={(event) => setMinutes(event.currentTarget.value)}
                       aria-invalid={!validMinutes}
                       aria-describedby="workout-detail"
-                      class="min-h-16 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-4 text-xl text-zinc-100 outline-none focus:border-orange-400"
+                      class={cn(inputClass, validMinutes ? validInputClass : invalidInputClass)}
                     />
                   </label>
-                  <label class="min-w-0 space-y-2 text-sm text-zinc-300">
+                  <label class="min-w-0 space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
                     <span class="block">Rounds</span>
                     <input
                       type="number"
@@ -145,7 +162,7 @@ export function IntervalTimer() {
                       onInput={(event) => setRounds(event.currentTarget.value)}
                       aria-invalid={!validRounds}
                       aria-describedby="workout-detail"
-                      class="min-h-16 w-full rounded-xl border border-zinc-800 bg-zinc-900 px-4 text-xl text-zinc-100 outline-none focus:border-orange-400"
+                      class={cn(inputClass, validRounds ? validInputClass : invalidInputClass)}
                     />
                   </label>
                 </div>
@@ -154,31 +171,31 @@ export function IntervalTimer() {
                   id="workout-detail"
                   aria-live="polite"
                   class={cn(
-                    "rounded-2xl border bg-zinc-950 p-4 text-sm sm:p-5",
-                    valid && !fractionalRounds
-                      ? "border-zinc-800 text-zinc-400"
-                      : "border-orange-400/40 text-orange-300",
+                    "rounded-2xl border p-4 text-sm sm:p-5",
+                    valid
+                      ? "border-zinc-200 bg-white text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400"
+                      : "border-red-200 bg-red-50 text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-400",
                   )}
                 >
                   {valid ? (
                     <div class="space-y-3">
                       <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
                         <span>Time per round</span>
-                        <strong class="text-2xl font-medium tracking-tight text-zinc-100 tabular-nums">
+                        <strong class="text-2xl font-medium tracking-tight text-zinc-950 dark:text-zinc-50 tabular-nums">
                           {roundTime}
                         </strong>
                       </div>
-                      <p class="border-t border-zinc-800 pt-3 text-xs leading-5">
-                        {minutes} {Number(minutes) === 1 ? "minute" : "minutes"}
-                        <span aria-hidden="true" class="px-2 text-zinc-600">
+                      <p class="border-t border-zinc-200 dark:border-zinc-800 pt-3 text-xs leading-5">
+                        {minutes} {Number(minutes) === 1 ? "minute" : "minutes"} requested
+                        <span aria-hidden="true" class="px-2 text-zinc-500 dark:text-zinc-400">
                           /
                         </span>
                         {count} {count === 1 ? "round" : "rounds"}
                       </p>
-                      {fractionalRounds && (
+                      {roundedRounds && (
                         <p class="leading-6">
-                          Rounds use fractional seconds to keep the workout exactly {minutes}{" "}
-                          {Number(minutes) === 1 ? "minute" : "minutes"}. You can start as usual.
+                          Each round is rounded to the nearest second. Actual total:{" "}
+                          {formatTime(duration)}.
                         </p>
                       )}
                     </div>
@@ -193,17 +210,22 @@ export function IntervalTimer() {
                   <button type="submit" disabled={!valid} class={cn(primaryButton, "w-full")}>
                     Start workout <ArrowRight size={22} />
                   </button>
-                  <p class="text-center text-xs leading-6 text-zinc-500">
+                  <p class="text-center text-xs leading-6 text-zinc-600 dark:text-zinc-400">
                     3-second countdown before your first round.
                   </p>
                 </div>
               </form>
             </div>
           ) : (
-            <div class="mx-auto w-full max-w-xl rounded-3xl border border-zinc-800 bg-zinc-900/30 px-5 py-8 text-center sm:p-8">
+            <div class="mx-auto w-full max-w-xl rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 px-5 py-8 text-center sm:p-8">
               <div
                 role="status"
-                class="mb-6 flex min-h-8 items-center justify-center gap-2 text-sm font-medium tracking-widest text-orange-400 uppercase"
+                class={cn(
+                  "mb-6 flex min-h-8 items-center justify-center gap-2 text-sm font-medium tracking-widest uppercase",
+                  workout.status === "paused" || workout.status === "stopped"
+                    ? "text-zinc-600 dark:text-zinc-400"
+                    : "text-orange-700 dark:text-orange-400",
+                )}
               >
                 {completed ? (
                   <>
@@ -219,27 +241,29 @@ export function IntervalTimer() {
                   "Running"
                 )}
               </div>
-              <h2 class="text-xl font-medium text-zinc-300 sm:text-3xl">
+              <h2 class="text-xl font-medium text-zinc-700 dark:text-zinc-300 sm:text-3xl">
                 {workout.preparing && !ended ? (
                   "Take your position"
                 ) : (
                   <>
-                    Round <span class="text-zinc-50">{workout.round}</span>{" "}
-                    <span class="text-zinc-600">/ {count}</span>
+                    Round <span class="text-zinc-950 dark:text-zinc-50">{workout.round}</span>{" "}
+                    <span class="text-zinc-600 dark:text-zinc-400">/ {count}</span>
                   </>
                 )}
               </h2>
               <div
                 class={cn(
                   "my-6 text-6xl leading-none font-semibold tracking-tighter tabular-nums sm:text-8xl",
-                  workout.preparing && !ended ? "text-orange-400" : "text-zinc-50",
+                  workout.preparing && !ended
+                    ? "text-orange-700 dark:text-orange-400"
+                    : "text-zinc-950 dark:text-zinc-50",
                 )}
               >
                 {workout.preparing && !ended
                   ? workout.preparationRemaining
                   : formatTime(ended ? workout.workoutElapsed : workout.remaining)}
               </div>
-              <p class="text-sm text-zinc-400">
+              <p class="text-sm text-zinc-600 dark:text-zinc-400">
                 {ended
                   ? "total time"
                   : workout.preparing
@@ -247,14 +271,14 @@ export function IntervalTimer() {
                     : "left this round"}
               </p>
 
-              <div class="mt-8 border-t border-zinc-800 pt-6">
+              <div class="mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-6">
                 <progress
                   aria-label="Workout progress"
                   max={duration}
                   value={workout.workoutElapsed}
-                  class="block h-2 w-full overflow-hidden rounded-full accent-orange-400"
+                  class="block h-2 w-full overflow-hidden rounded-full accent-orange-700 dark:accent-orange-400"
                 />
-                <div class="mt-4 flex flex-wrap justify-between gap-x-4 gap-y-2 text-xs text-zinc-400 sm:text-sm">
+                <div class="mt-4 flex flex-wrap justify-between gap-x-4 gap-y-2 text-xs text-zinc-600 dark:text-zinc-400 sm:text-sm">
                   <span>{roundTime} / round</span>
                   <span>{formatTime(workout.totalRemaining)} remaining</span>
                 </div>
