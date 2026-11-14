@@ -1,3 +1,5 @@
+import { sumBy } from "es-toolkit";
+
 export const ingredients = [
   { key: "water", label: "Hydration", name: "Water", min: 1, max: 150, decimals: 0 },
   { key: "salt", label: "Salt", name: "Salt", min: 0, max: 10, decimals: 1 },
@@ -101,8 +103,7 @@ export const defaultPreset = presets[1];
 
 export function calculateDough(fields: DoughFields) {
   const total = Number(fields.count) * Number(fields.weight);
-  const flour =
-    total / (1 + ingredients.reduce((sum, item) => sum + Number(fields[item.key]), 0) / 100);
+  const flour = total / (1 + sumBy(ingredients, (item) => Number(fields[item.key])) / 100);
   return { total, flour };
 }
 
