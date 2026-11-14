@@ -1,0 +1,33 @@
+{
+  "thresholds": {
+    "kettlebell": [2000, 4000, 6000],
+    "gym": [4000, 7000, 10000],
+    "running": [4, 7, 10]
+  },
+  "entries": [
+    {
+      "date": "2026-11-02",
+      "kettlebell": 3600
+    },
+    {
+      "date": "2026-11-04",
+      "kettlebell": 3600
+    },
+    {
+      "date": "2026-11-06",
+      "kettlebell": 3600
+    },
+    {
+      "date": "2026-11-09",
+      "kettlebell": 2880
+    },
+    {
+      "date": "2026-11-11",
+      "kettlebell": 2880
+    },
+    {
+      "date": "2026-11-13",
+      "kettlebell": 2880
+    }
+  ]
+}

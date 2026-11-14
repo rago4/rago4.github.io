@@ -1,27 +1,39 @@
-import { ArrowRight, ArrowUpRight, LampDesk, Pizza, Timer } from "lucide-preact";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  ChartNoAxesCombined,
+  LampDesk,
+  Pizza,
+  Timer,
+} from "lucide-preact";
 import { usePageTitle } from "@/use-page-title.ts";
 
 const projects = [
+  {
+    name: "Workout tracker",
+    href: "#/workout-tracker",
+    icon: ChartNoAxesCombined,
+    description: "A record of my kettlebell workouts, gym sessions, and occasional runs.",
+  },
   {
     name: "Interval timer",
     href: "#/interval-timer",
     icon: Timer,
     description:
-      "I built this for my kettlebell workouts. Set a duration and number of rounds, with a beep after each round.",
+      "A simple timer I use for kettlebell workouts, with timed rounds and a beep between them.",
   },
   {
     name: "Pizza dough calculator",
     href: "#/pizza-dough",
     icon: Pizza,
-    description:
-      "I built this to keep my pizza dough recipes repeatable. Choose a recipe, then adjust the dough balls and ingredients.",
+    description: "I use this to scale my pizza dough recipes and keep the results repeatable.",
   },
   {
     name: "Reading lamp",
     href: "#/lamp",
     icon: LampDesk,
     description:
-      "I built this to use my monitor as a reading light in a dark room. Choose candle, warm light, or daylight.",
+      "A small tool that turns my monitor into a reading light, with three lighting modes.",
   },
 ].sort((a, b) => a.name.localeCompare(b.name, "en"));
 
