@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { Body, Box, ContactMaterial, Material, Plane, Vec3, World } from "cannon-es";
+import { random } from "es-toolkit";
 import { createDragControls } from "./drag-digits.ts";
 
 function digitGeometry(digit: "4" | "0") {
@@ -203,17 +204,13 @@ export function createScene(container: HTMLDivElement) {
     stop();
     digits.forEach(({ body }, index) => {
       body.position.set(
-        (index - 1) * 2.7 + (Math.random() - 0.5) * 0.3,
+        (index - 1) * 2.7 + random(-0.15, 0.15),
         7 + index * 2.8,
-        (Math.random() - 0.5) * 0.5,
+        random(-0.25, 0.25),
       );
-      body.quaternion.setFromEuler(-0.3, (Math.random() - 0.5) * 0.4, (Math.random() - 0.5) * 0.4);
+      body.quaternion.setFromEuler(-0.3, random(-0.2, 0.2), random(-0.2, 0.2));
       body.velocity.set(0, 0, 0);
-      body.angularVelocity.set(
-        -1.2 - Math.random(),
-        (Math.random() - 0.5) * 0.6,
-        (Math.random() - 0.5) * 0.6,
-      );
+      body.angularVelocity.set(-random(1.2, 2.2), random(-0.3, 0.3), random(-0.3, 0.3));
       body.wakeUp();
     });
     if (motion.matches) {
